@@ -1,25 +1,80 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from "styled-components";
+
+import {
+  Button,
+  Icon,
+  Profile,
+  Layout,
+  Popover,
+  Text,
+  List,
+} from "./components";
+
+import { useGetRandomPhoto } from "./hooks";
+import { PhotoDataType } from "./types";
+import { download } from "./utils";
+
+const StyledLogo = styled(Icon)`
+  opacity: 0.8;
+  transition: opacity 0.1s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const Info = styled.a`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledIcon = styled(Icon)`
+  fill: #fff;
+  opacity: 0.8;
+  transition: opacity 0.1s ease-in-out;
+  margin-right: 4px;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 function App() {
+  const photo: PhotoDataType | undefined = useGetRandomPhoto();
+
+  if (!photo) return <div></div>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+    <Layout
+      backgroundImage={photo.urls.photo}
+      leftTopCorner={
         <a
-          className="App-link"
-          href="https://reactjs.org"
+          href={photo.urls.unplash}
+          className="logo"
           target="_blank"
-          rel="noopener noreferrer"
+          title="View photo on Unsplash"
+          rel="noreferrer"
         >
-          Learn React
+          <StyledLogo name="logo" />
         </a>
-      </header>
-    </div>
+      }
+      rightTopCorner={
+        <Button onClick={() => download(photo.urls.download)}>Download</Button>
+      }
+      leftBottomCorner={<Profile user={photo.user} location={photo.location} />}
+      rightBottomCorner={
+        <Popover
+          position="top"
+          popoverContent={<List items={photo.exif} />}
+          popoverTrigger={
+            <Info>
+              <StyledIcon name="info" />
+              <Text color="#fff">Info</Text>
+            </Info>
+          }
+        />
+      }
+    />
   );
 }
 
