@@ -65,7 +65,9 @@ function App() {
       rightBottomCorner={
         <Popover
           position="top"
-          popoverContent={<List items={photo.exif} />}
+          popoverContent={
+            <List items={photo.exif.filter((item) => item.content !== null)} />
+          }
           popoverTrigger={
             <Info>
               <StyledIcon name="info" />

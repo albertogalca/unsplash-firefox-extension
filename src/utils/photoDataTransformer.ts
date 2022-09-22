@@ -25,8 +25,11 @@ export const getPhotoData = (data: any): PhotoDataType | undefined => {
       { label: "Shutter Speed", content: data.exif.exposure_time },
       { label: "Aperture", content: data.exif.aperture },
       { label: "Focal Length", content: data.exif.focal_length },
-      { label: "ISO", content: String(data.exif.iso) },
-      { label: "Published on", content: format(new Date(), "PPP") },
+      { label: "ISO", content: data.exif.iso },
+      {
+        label: "Published on",
+        content: format(new Date(data.created_at), "PPP"),
+      },
       { label: "Dimensions", content: `${data.width} x ${data.height}` },
     ],
   };
